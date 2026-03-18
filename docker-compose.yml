@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_twotier:/var/lib/mysql
+    networks:
+      - twotier
+    environment:
+      MYSQL_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: vdk_db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
+      interval: 10s
+      retries: 5
+      start_period: 60s
+      timeout: 5s
+
+  flaskapp:
+    build:
+      context: .
+    container_name: flaskapp
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_DB: vdk_db
+      MYSQL_HOST: mysql
+    networks:
+      - twotier
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+
+
+volumes:
+  mysql_twotier:
+
+networks:
+  twotier:
+
