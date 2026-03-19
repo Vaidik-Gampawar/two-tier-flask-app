@@ -21,8 +21,7 @@ services:
       timeout: 5s
 
   flaskapp:
-    build:
-      context: .
+    image: vaidik05/two-tier-flask-app
     container_name: flaskapp
     ports:
       - "5000:5000"
