@@ -9,7 +9,13 @@ pipeline{
         }
         stage("Build"){
             steps{
-                sh "docker build -t my-app ."
+                withCredentials([usernamePassword(
+                    credentialsId: "dockerHubCreds"
+                    usernameVariable: "dockerHubUser"
+                )]){
+                    sh "docker build -t ${env.dockerHubUser}/my-app ."
+                }
+                
             }
         }
         stage("Test"){
@@ -25,7 +31,6 @@ pipeline{
                     passwordVariable: "dockerHubPass"
                     )]) {
                         sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                        sh "docker image tag my-app ${env.dockerHubUser}/my-app"
                         sh "docker push ${env.dockerHubUser}/my-app"
                     }
             }
