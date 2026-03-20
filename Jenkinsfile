@@ -11,7 +11,8 @@ pipeline{
             steps{
                 withCredentials([usernamePassword(
                     credentialsId: "dockerHubCreds",
-                    usernameVariable: "dockerHubUser"
+                    usernameVariable: "dockerHubUser",
+                    passwordVariable: "dockerHubPass"
                 )]){
                     sh "docker build -t ${env.dockerHubUser}/my-app ."
                 }
