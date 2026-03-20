@@ -9,25 +9,25 @@ pipeline{
         }
         stage("Build"){
             steps{
-                sh "docker build -t two-tier-flask-app ."
+                sh "docker build -t my-app ."
             }
         }
         stage("Test"){
             steps{
-                echo "Done by testers"
+                echo "Done by Tester."
             }
         }
         stage("Push to DockerHub"){
             steps{
                 withCredentials([usernamePassword(
-                    credentialsId:"dockerHubCreds",
-                    passwordVariable: "dockerHubPass",
-                    usernameVariable: "dockerHubUser")]){
-                
-                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker image tag two-tier-flask-app ${env.dockerHubUser}/two-tier-flask-app"
-                    sh "docker push ${env.dockerHubUser}/two-tier-flask-app"
-                }
+                    credentialsId: "dockerHubCreds",
+                    usernameVariable: "dockerHubUser",
+                    passwordVariable: "dockerHubPass"
+                    )]) {
+                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                        sh "docker image tag my-app ${env.dockerHubUser}/my-app"
+                        sh "docker push ${env.dockerHubUser}/my-app"
+                    }
             }
         }
         stage("Deploy"){
