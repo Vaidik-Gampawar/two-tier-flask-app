@@ -42,4 +42,21 @@ pipeline{
             }
         }
     }
+    
+post {
+    success {
+        emailext(
+            subject: "Build Successfull",
+            body: "Good News: Your build was successful",
+            to: 'vdkcodes@gmail.com'
+            )
+    }
+    failure {
+        emailext(
+            subject: "Build Fail",
+            body: "Bad News: Your build was failed",
+            to: 'vdkcodes@gmail.com'
+            )
+    }
+}
 }
