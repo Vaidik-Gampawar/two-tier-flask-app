@@ -5,7 +5,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql_twotier:/var/lib/mysql
+      - mysql_twotier:/var/lib/mysql
     networks:
       - twotier
     environment:
