@@ -20,7 +20,7 @@ pipeline{
         stage("Build"){
             steps{
                 script{
-                    docker_build()
+                    docker_build("dockerHubCreds", "my-app")
                 }
                 
             }
@@ -33,7 +33,7 @@ pipeline{
         stage("Push to DockerHub"){
             steps{
                 script{
-                    docker_push()
+                    docker_push("dockerHubCreds", "my-app")
                 }
             }
         }
