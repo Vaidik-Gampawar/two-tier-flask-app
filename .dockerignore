@@ -1,0 +1,4 @@
+mysql_twotier/
+.git
+*.log
+__pycache__/
