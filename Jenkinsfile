@@ -32,14 +32,9 @@ pipeline{
         }
         stage("Push to DockerHub"){
             steps{
-                withCredentials([usernamePassword(
-                    credentialsId: "dockerHubCreds",
-                    usernameVariable: "dockerHubUser",
-                    passwordVariable: "dockerHubPass"
-                    )]) {
-                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                        sh "docker push ${env.dockerHubUser}/my-app"
-                    }
+                script{
+                    docker_push()
+                }
             }
         }
         stage("Deploy"){
