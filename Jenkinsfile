@@ -1,25 +1,26 @@
+@Library("Shared") _
 pipeline{
     agent { label "dev"};
     
     stages{
         stage("Code Clone"){
             steps{
-                git url: "https://github.com/Vaidik-Gampawar/two-tier-flask-app", branch: "master"
+                script{
+                    clone("https://github.com/Vaidik-Gampawar/two-tier-flask-app", "master")
+                }
             }
         }
         stage("Trivy File System Scan"){
             steps{
-                sh "trivy fs . -o results.json"
+                script{
+                    trivy_fs()
+                }
             }
         }
         stage("Build"){
             steps{
-                withCredentials([usernamePassword(
-                    credentialsId: "dockerHubCreds",
-                    usernameVariable: "dockerHubUser",
-                    passwordVariable: "dockerHubPass"
-                )]){
-                    sh "docker build -t ${env.dockerHubUser}/my-app ."
+                script{
+                    docker_build()
                 }
                 
             }
